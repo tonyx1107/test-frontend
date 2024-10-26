@@ -3,7 +3,10 @@ import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
+import { useRoute } from "vue-router";
+import router from "@/router";
 
+const currentRoute = useRoute();
 const props = defineProps(["post"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
 const { currentUsername } = storeToRefs(useUserStore());
@@ -16,12 +19,19 @@ const deletePost = async () => {
   }
   emit("refreshPosts");
 };
+
+async function viewComments() {
+  void router.push({ name: "Comments", params: { id: props.post._id } });
+}
 </script>
 
 <template>
   <p class="author">{{ props.post.author }}</p>
   <p>{{ props.post.content }}</p>
   <div class="base">
+    <menu>
+      <button v-if="props.post._id != currentRoute.params.id" class="btn-small pure-button" @click="viewComments">View Comments & Reply</button>
+    </menu>
     <menu v-if="props.post.author == currentUsername">
       <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
       <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>

@@ -40,6 +40,10 @@ export default class PostingConcept {
     return await this.posts.readMany({ author });
   }
 
+  async getById(_id: ObjectId) {
+    return await this.posts.readOne({ _id });
+  }
+
   async update(_id: ObjectId, content?: string, options?: PostOptions) {
     // Note that if content or options is undefined, those fields will *not* be updated
     // since undefined values for partialUpdateOne are ignored.
@@ -59,6 +63,12 @@ export default class PostingConcept {
     }
     if (post.author.toString() !== user.toString()) {
       throw new PostAuthorNotMatchError(user, _id);
+    }
+  }
+
+  async assertPostExists(_id: ObjectId) {
+    if (!(await this.posts.readOne({ _id }))) {
+      throw new NotFoundError(`Post ${_id} does not exist!`);
     }
   }
 }
