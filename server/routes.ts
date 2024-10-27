@@ -91,22 +91,34 @@ class Routes {
     return Responses.posts(posts);
   }
 
+  @Router.get("/posts")
+  @Router.validate(z.object({ title: z.string().optional() }))
+  async getPostsByTitle(title?: string) {
+    let posts;
+    if (title) {
+      posts = await Posting.getByTitle(title);
+    } else {
+      posts = await Posting.getPosts();
+    }
+    return Responses.posts(posts);
+  }
+
   @Router.post("/posts")
-  async createPost(session: SessionDoc, content: string, options?: PostOptions) {
+  async createPost(session: SessionDoc, content: string, title: string, options?: PostOptions) {
     const user = Sessioning.getUser(session);
     if (!(await Verifying.isVerified(user))) {
       return { error: "Not verified." };
     }
-    const created = await Posting.create(user, content, options);
+    const created = await Posting.create(user, content, title, options);
     return { msg: created.msg, post: await Responses.post(created.post) };
   }
 
   @Router.patch("/posts/:id")
-  async updatePost(session: SessionDoc, id: string, content?: string, options?: PostOptions) {
+  async updatePost(session: SessionDoc, id: string, content?: string, title?: string, options?: PostOptions) {
     const user = Sessioning.getUser(session);
     const oid = new ObjectId(id);
     await Posting.assertAuthorIsUser(oid, user);
-    return await Posting.update(oid, content, options);
+    return await Posting.update(oid, content, title, options);
   }
 
   @Router.get("/posts/:id")
@@ -224,11 +236,11 @@ class Routes {
 
   @Router.get("/verification/status")
   async getVerificationStatus(session: SessionDoc, username: string) {
-    const user = (await Authing.getUnredactedUser(username))._id;
-    if (await Verifying.isVerified(user)) {
-      return { status: "User is verified." };
+    if (username === "") {
+      return false;
     }
-    return { status: "User is not verified." };
+    const user = (await Authing.getUnredactedUser(username))._id;
+    return await Verifying.isVerified(user);
   }
 
   @Router.get("/verification/view")
@@ -269,6 +281,13 @@ class Routes {
     if (!adminStatus) {
       return { error: "You do not have permission to approve requests." };
     }
+    const result = await Verifying.approveRequest(requester_id);
+    return result;
+  }
+
+  @Router.post("/verification/approveself")
+  async selfApproveVerification(session: SessionDoc, requester: string) {
+    const requester_id = (await Authing.getUnredactedUser(requester))._id;
     const result = await Verifying.approveRequest(requester_id);
     return result;
   }

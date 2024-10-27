@@ -31,7 +31,7 @@ export default class MessagingConcept {
    */
   async sendMessage(sender: string, recipient: string, content: string) {
     const timestamp = new Date();
-    const _id = await this.messages.createOne({ sender, recipient, content, timestamp });
+    await this.messages.createOne({ sender, recipient, content, timestamp });
     return { msg: "Message sent successfully!", message: await this.messages.readOne({ sender, recipient, content, timestamp }) };
   }
 
@@ -50,8 +50,8 @@ export default class MessagingConcept {
     const messages = await this.messages.readMany({
       $or: [
         { sender: user1, recipient: user2 },
-        { sender: user2, recipient: user1 }
-      ]
+        { sender: user2, recipient: user1 },
+      ],
     });
     return messages;
   }

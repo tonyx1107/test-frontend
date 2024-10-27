@@ -68,8 +68,27 @@ watch(
 
 <template>
   <div v-if="loaded && isLoggedIn && currentUsername !== props.username">
-    <button class="btn-small pure-button" @click="toggleFollow">
+    <button class="follow-button" @click="toggleFollow">
       {{ following ? "Unfollow" : "Follow" }}
     </button>
   </div>
 </template>
+
+<style>
+.follow-button {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 12px;
+  background-color: #050303;
+  color: #ffffff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.follow-button:hover {
+  background-color: #343434;
+}
+</style>

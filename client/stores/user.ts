@@ -53,6 +53,10 @@ export const useUserStore = defineStore(
       resetStore();
     };
 
+    const isVerified = async () => {
+      await fetchy("/api/verification/status", "GET");
+    };
+
     return {
       currentUsername,
       isLoggedIn,
@@ -63,6 +67,7 @@ export const useUserStore = defineStore(
       updateUserUsername,
       updateUserPassword,
       deleteUser,
+      isVerified,
     };
   },
   { persist: true },

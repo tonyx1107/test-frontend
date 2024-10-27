@@ -56,11 +56,39 @@ onBeforeUpdate(async () => {
 
 <template>
   <div class="followers" v-if="loaded">
-    <p class="clickable" @click="viewFollowers">Followers: {{ followers.length }}</p>
-    <p class="clickable" @click="viewFollowing">Following: {{ following.length }}</p>
+    <p style="text-align: center" class="clickable" @click="viewFollowers">
+      <span>
+        {{ followers.length }}
+        <b>followers</b>
+      </span>
+    </p>
+    <p class="clickable" @click="viewFollowing">
+      <span>
+        {{ following.length }}
+        <b>following</b>
+      </span>
+    </p>
   </div>
   <div class="followers" v-else>
     <p>Loading...</p>
     <p></p>
   </div>
 </template>
+<style>
+.clickable {
+  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 200px;
+  margin-right: 8em;
+  display: inline;
+}
+
+span {
+  font-size: 1.5em;
+}
+
+span b {
+  font-size: 80%;
+  font-weight: normal;
+}
+</style>

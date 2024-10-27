@@ -26,7 +26,7 @@ export default class VerifyingConcept {
 
   async createVerificationRequest(user: ObjectId, credentials: string) {
     await this.assertValidRequest(user, credentials);
-    const _id = await this.verificationRequests.createOne({ user, credentials});
+    await this.verificationRequests.createOne({ user, credentials });
     return { msg: "Verification request created successfully!", request: await this.verificationRequests.readOne({ user }) };
   }
 
@@ -53,7 +53,7 @@ export default class VerifyingConcept {
 
   async getAllVerified() {
     const verifiedUsers = await this.verified.readMany({});
-    return verifiedUsers; 
+    return verifiedUsers;
   }
 
   async approveRequest(user: ObjectId) {
@@ -76,14 +76,14 @@ export default class VerifyingConcept {
   }
 
   async deleteVerified(user: ObjectId, reason?: string) {
-    const verifiedUser = await this.verified.readOne({user});
+    const verifiedUser = await this.verified.readOne({ user });
     if (!verifiedUser) {
-      throw new NotFoundError("User is not verified.")
+      throw new NotFoundError("User is not verified.");
     }
     await this.verified.deleteOne({ user: user });
     return { msg: `Verification removed. ${reason ? "Reason: " + reason : ""}` };
   }
- 
+
   private async assertValidRequest(user: ObjectId, credentials: string) {
     if (!user || !credentials) {
       throw new BadValuesError("User ID and credentials must be non-empty!");

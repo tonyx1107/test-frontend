@@ -11,6 +11,7 @@ import CreatePostView from "../views/CreatePostView.vue";
 import FollowsView from "../views/FollowsView.vue";
 import FriendsListComponent from "../components/Following/FriendsListComponent.vue";
 import MessageComponent from "../components/Messaging/MessageComponent.vue";
+import VerificationRequestForm from "../components/Verification/VerificationRequestForm.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -72,6 +73,11 @@ const router = createRouter({
       path: "/messages/:friend",
       name: "Messages",
       component: MessageComponent,
+    },
+    {
+      path: "/verification/",
+      name: "Verification",
+      component: VerificationRequestForm,
     },
   ],
 });

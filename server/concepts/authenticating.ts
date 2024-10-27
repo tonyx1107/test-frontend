@@ -60,7 +60,7 @@ export default class AuthenticatingConcept {
   async getUnredactedUser(username: string) {
     const user = await this.users.readOne({ username });
     if (user === null) {
-      throw new NotFoundError(`User not found!`);
+      throw new NotFoundError(`User ${username} not found!`);
     }
     return user;
   }

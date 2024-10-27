@@ -9,7 +9,6 @@ const currentRouteName = computed(() => currentRoute.name);
 
 <template>
   <section>
-    <h1>{{ currentRoute.params.username }}</h1>
     <h2>{{ currentRouteName }} List</h2>
     <FollowListComponent :username="currentRoute.params.username" :type="currentRouteName" />
   </section>
@@ -21,6 +20,10 @@ section {
   flex-direction: column;
   gap: 1em;
   padding: 1em;
+}
+
+h2 {
+  margin: auto;
 }
 
 section,

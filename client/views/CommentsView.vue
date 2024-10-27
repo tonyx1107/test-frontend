@@ -53,7 +53,7 @@ onBeforeUpdate(async () => {
 <template>
   <section class="posts" v-if="loaded && root">
     <article v-if="isPost">
-      <PostComponent v-if="editing !== root._id" :post="root" @refreshPosts="getPostOrComment" @editPost="updateEditing" />
+      <PostComponent v-if="editing !== root._id" :post="root" :collapsible="false" @refreshPosts="getPostOrComment" @editPost="updateEditing" />
       <EditPostForm v-else :post="root" @refreshPosts="getPostOrComment" @editPost="updateEditing" />
     </article>
     <article v-else>

@@ -38,3 +38,8 @@ a.button {
 .clickable:hover {
   text-decoration: underline;
 }
+
+.content {
+  padding-top: 80px; /* Adjust padding to match the navbar's height */
+}
+
