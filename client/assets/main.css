@@ -30,3 +30,11 @@ a.button {
   align-items: center;
   gap: 1em;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  text-decoration: underline;
+}

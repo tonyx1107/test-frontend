@@ -7,6 +7,10 @@ import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
 import CommentsView from "../views/CommentsView.vue";
+import CreatePostView from "../views/CreatePostView.vue";
+import FollowsView from "../views/FollowsView.vue";
+import FriendsListComponent from "../components/Following/FriendsListComponent.vue";
+import MessageComponent from "../components/Messaging/MessageComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,6 +47,31 @@ const router = createRouter({
       path: "/:catchAll(.*)",
       name: "not-found",
       component: NotFoundView,
+    },
+    {
+      path: "/post",
+      name: "CreatePost",
+      component: CreatePostView,
+    },
+    {
+      path: "/followers/:username",
+      name: "Followers",
+      component: FollowsView,
+    },
+    {
+      path: "/following/:username",
+      name: "Following",
+      component: FollowsView,
+    },
+    {
+      path: "/friends",
+      name: "Friends",
+      component: FriendsListComponent,
+    },
+    {
+      path: "/messages/:friend",
+      name: "Messages",
+      component: MessageComponent,
     },
   ],
 });

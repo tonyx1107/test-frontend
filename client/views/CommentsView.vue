@@ -3,6 +3,8 @@ import { onBeforeMount, onBeforeUpdate, ref } from "vue";
 import { useRoute } from "vue-router";
 import CommentComponent from "../components/Comment/CommentComponent.vue";
 import CommentListComponent from "../components/Comment/CommentListComponent.vue";
+import EditCommentForm from "@/components/Comment/EditCommentForm.vue";
+import EditPostForm from "@/components/Post/EditPostForm.vue";
 import PostComponent from "../components/Post/PostComponent.vue";
 import { fetchy } from "../utils/fetchy";
 
@@ -55,7 +57,8 @@ onBeforeUpdate(async () => {
       <EditPostForm v-else :post="root" @refreshPosts="getPostOrComment" @editPost="updateEditing" />
     </article>
     <article v-else>
-      <CommentComponent :comment="root" />
+      <CommentComponent v-if="editing !== root._id" :comment="root" @refreshComments="getPostOrComment" @editComment="updateEditing" />
+      <EditCommentForm v-else :comment="root" @refreshComments="getPostOrComment" @editComment="updateEditing" />
     </article>
   </section>
   <p v-else-if="loaded">Post or comment not found.</p>

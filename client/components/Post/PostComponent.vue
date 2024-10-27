@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 import { useRoute } from "vue-router";
 import router from "@/router";
+import FollowComponent from "../Following/FollowComponent.vue";
 
 const currentRoute = useRoute();
 const props = defineProps(["post"]);
@@ -27,6 +28,7 @@ async function viewComments() {
 
 <template>
   <p class="author">{{ props.post.author }}</p>
+  <FollowComponent :username="props.post.author" />
   <p>{{ props.post.content }}</p>
   <div class="base">
     <menu>

@@ -124,16 +124,27 @@ class Routes {
     return Posting.delete(oid);
   }
 
+  @Router.get("/follow")
+  async getFollows() {
+    return await Responses.follow(await Following.getFollows());
+  }
+
   @Router.get("/follow/followers")
-  async getFollowers(session: SessionDoc) {
-    const user = Sessioning.getUser(session);
-    return await Authing.idsToUsernames(await Following.getFollowers(user));
+  async getFollowers(username: string) {
+    const userOid = (await Authing.getUserByUsername(username))._id;
+    return await Responses.follow(await Following.getFollowers(userOid));
   }
 
   @Router.get("/follow/following")
-  async getFollowing(session: SessionDoc) {
-    const user = Sessioning.getUser(session);
-    return await Authing.idsToUsernames(await Following.getFollowing(user));
+  async getFollowing(username: string) {
+    const userOid = (await Authing.getUserByUsername(username))._id;
+    return await Responses.follow(await Following.getFollowing(userOid));
+  }
+
+  @Router.get("/follow/friends")
+  async getFriends(username: string) {
+    const userOid = (await Authing.getUserByUsername(username))._id;
+    return await Responses.follow(await Following.getFriends(userOid));
   }
 
   @Router.delete("/follow/follower/:follower")
@@ -148,6 +159,20 @@ class Routes {
     const user = Sessioning.getUser(session);
     const friendOid = (await Authing.getUserByUsername(following))._id;
     return await Following.removeFollowing(user, friendOid);
+  }
+
+  @Router.post("/follow")
+  async follow(session: SessionDoc, username: string) {
+    const user = Sessioning.getUser(session);
+    const followedOid = (await Authing.getUserByUsername(username))._id;
+    return await Following.addFollower(user, followedOid);
+  }
+
+  @Router.delete("/follow/:username")
+  async unfollow(session: SessionDoc, username: string) {
+    const user = Sessioning.getUser(session);
+    const followedOid = (await Authing.getUserByUsername(username))._id;
+    return await Following.removeFollowing(user, followedOid);
   }
 
   @Router.get("/follow/requests")

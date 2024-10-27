@@ -1,5 +1,5 @@
 import { Authing } from "./app";
-import { AlreadyFriendsError, FriendNotFoundError, FriendRequestAlreadyExistsError, FollowRequestDoc, FriendRequestNotFoundError } from "./concepts/following";
+import { AlreadyFriendsError, FriendNotFoundError, FriendRequestAlreadyExistsError, FollowRequestDoc, FriendRequestNotFoundError, FollowerDoc } from "./concepts/following";
 import { PostAuthorNotMatchError, PostDoc } from "./concepts/posting";
 import { Router } from "./framework/router";
 import { CommentDoc } from "./concepts/discussing";
@@ -55,6 +55,13 @@ export default class Responses {
     const to = requests.map((request) => request.to);
     const usernames = await Authing.idsToUsernames(from.concat(to));
     return requests.map((request, i) => ({ ...request, from: usernames[i], to: usernames[i + requests.length] }));
+  }
+
+  static async follow(follows: FollowerDoc[]) {
+    const followers = follows.map((follow) => follow.follower);
+    const followeds = follows.map((follow) => follow.followed);
+    const usernames = await Authing.idsToUsernames(followers.concat(followeds));
+    return follows.map((follow, i) => ({ ...follow, follower: usernames[i], followed: usernames[i + follows.length] }));
   }
 }
 

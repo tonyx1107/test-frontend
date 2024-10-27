@@ -73,17 +73,31 @@ export default class FriendingConcept {
     return { msg: "Stopped following!" };
   }
 
+  async getFollows() {
+    return await this.friends.readMany({});
+  }
+
   async getFollowers(user: ObjectId) {
     const followers = await this.friends.readMany({ followed: user });
-    return followers.map((follower) => follower.follower);
+    return followers;
+    // return followers.map((follower) => follower.follower);
   }
 
   async getFollowing(user: ObjectId) {
     const followings = await this.friends.readMany({ follower: user });
-    return followings.map((following) => following.followed);
+    return followings;
+    // return followings.map((following) => following.followed);
   }
 
-  private async addFollower(user1: ObjectId, user2: ObjectId) {
+  async getFriends(user: ObjectId) {
+    const followers = await this.getFollowers(user);
+    const following = await this.getFollowing(user);
+    const followerIds = new Set(followers.map((follower) => follower.follower.toString()));
+    const friends = following.filter((followed) => followerIds.has(followed.followed.toString()));
+    return friends;
+  }
+
+  async addFollower(user1: ObjectId, user2: ObjectId) {
     void this.friends.createOne({ follower: user1, followed: user2 });
   }
 

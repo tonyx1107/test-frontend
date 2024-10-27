@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 import { useRoute } from "vue-router";
 import CommentListComponent from "./CommentListComponent.vue";
+import FollowComponent from "../Following/FollowComponent.vue";
 
 const currentRoute = useRoute();
 const props = defineProps(["comment"]);
@@ -28,6 +29,7 @@ async function viewComments() {
 
 <template>
   <p class="author">{{ props.comment.author }}</p>
+  <FollowComponent :username="props.comment.author" />
   <p>{{ props.comment.content }}</p>
   <div class="base">
     <menu v-if="props.comment.author == currentUsername">
